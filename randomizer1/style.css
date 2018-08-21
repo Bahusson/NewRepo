@@ -1,0 +1,341 @@
+<style type="text/css">
+  /*<![CDATA[*/
+/  *
+  {
+      padding: 0;
+      margin: 0;
+  }
+  body
+  {
+      background-image: url('images/blueeye.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+
+  }
+  #container
+  {
+      border: 1px solid black;
+      width: 1004px;
+      margin: 0 auto;
+  }
+  #pagetop
+  {
+      position: relative;
+      background-image: url('images/upperbanner.jpg');
+      width: 1004px;
+      height: 100px;
+  }
+  img.mainlogo
+  {
+      position: absolute;
+      border: 0;
+      right: 7px;
+      top: 8px;
+  }
+  a
+  {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted red;
+  }
+  a:hover
+  {
+      color: red;
+      border-bottom: none;
+  }
+  #contact_box
+  {
+      position: absolute;
+      background-color: gray;
+      border: 1px solid black;
+      font-size: 12px;
+      font-family: "Helvetica";
+      color: white;
+      left: 7px;
+      top: 6px;
+      opacity: 0.9;
+
+  }
+  /*upper menu*/
+  #upper_menu
+  {
+      position: absolute;
+      left: 180px;
+      bottom: 0px;
+  }
+  #true_upper_menu li
+  {
+      list-style-type: none;
+      float: left;
+      border-right: 1px solid #2E2121;
+      border-top: 1px solid #2E2121;
+
+  }
+  #true_upper_menu li a
+  {
+      background-image: url('images/button1.gif');
+      height:31px;
+      display: inline-block;
+      float: left;
+      border-bottom: none;
+      padding: 10px 10px 0px 10px;
+      font-family: "Trebuchet MS", "Verdana", "Arial", "Helvetica";
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+  }
+  #true_upper_menu li a:hover, #true_upper_menu li.current a
+  {
+      background-image: url('images/button2.gif');
+      color: #CCCCCC;
+  }
+  /*middle menu*/
+  #mid_menu
+  {
+      background-image: url('images/button1.gif');
+      border: 1px solid black;
+      width: 1004px;
+      height: 31px;
+  }
+  #mid_menu #level_one
+  {
+    margin-left: 212px;
+  }
+  #mid_menu li
+  {
+      list-style-type: none;
+      float: left;
+      padding: 5px;
+  }
+  #mid_menu li a
+  {
+      border-bottom: none;
+      font-size: 14px;
+      font-family: "trebuchet MS";
+      font-weight: bold;
+      font-style: italic;
+      color: black;
+
+  }
+  #mid_menu li span.break
+  {
+      color: black;
+      font-weight: bold;
+      font size: 14px;
+  }
+  #mid_menu li span.link2
+  {
+      display:block;
+      margin-top: 2px;
+      margin-bottom: 6px;
+  }
+  #mid_menu li a:hover
+  {
+      color: white;
+  }
+  /*SLIDING MENU*/
+  #level_one ul.level_two
+  {
+      display: none;
+  }
+  #level_one li:hover .level_two
+  {
+      display: block;
+      width: 100px;
+      position:
+      left: 0px;
+
+  }
+  #level_one li .level_two li
+  {
+      width: 75px;
+      text-align: left;
+      margin-left: 15px;
+      border-top: 1px solid black;
+  }
+  #level_one li
+  {
+      position: relative;
+  }
+  #level_one li .level_two
+  {
+      position: absolute;
+      background-color: #655533;
+      border-left: 2px solid black;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+      top: 1,9cm;
+      left: 0cm;
+      opacity: 0.9;
+      filter: alpha(opacity=9);
+      z-index: 1
+  }
+  #level_one > li
+  {
+      height: 32px;
+  }
+  #level_one li .level_two li a
+  {
+      display: block;
+      width: 60px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      font-family: "Verdana";
+      font-style: normal;
+      font-size: 10px;
+  }
+  #level_one li .level_two a:hover
+  {
+      background-color: #967C49;
+      padding-left: 15px;
+      padding-right: 15px;
+      margin-left: -15px;
+      z-index: 50
+  }
+  #level_one li .level_two li.prime_menu
+  {
+      border-top: 2px solid black;
+  }
+  #content
+  {
+      width: 944px;
+  }
+  #main_content
+  {
+      background-image: url('images/main_body.gif');
+      opacity: 0.9;
+      width: 944px;
+      background-repeat: repeat-y;
+      z-index: 0;
+  }
+  #text
+  {
+      text-align: justify;
+      padding: 10px 50px;
+      line-height: 140%;
+      font-size: 12px;
+      font-family: "Trebuchet MS"
+  }
+  h1
+  {
+      font-size: 18px;
+      text-align: center;
+      color: #0A3C72;
+      margin-bottom: 16px;
+      margin-top: 4px;
+      font-family: "Tahoma";
+      font-style: italic;
+  }
+  p
+  {
+    margin-bottom: 15px;
+  }
+  h3
+  {
+    margin-bottom: 10px;
+    color: #0A3C72;
+  }
+  #content .side_text
+  {
+      text-align: left;
+      font-family: "Verdana";
+      font-size: 12px;
+      float: right;
+      width: 150px;
+      padding: 10px;
+      margin: 10px;
+      margin-right: 45px;
+      margin-top: 45px;
+      border: 1px solid black;
+  }
+  #content .side_picture
+  {
+      float:right;
+      clear:right;
+      margin-right: 45px;
+      margin-top: 35px;
+      margin-left: 15px;
+  }
+  #content .side_picture a
+  {
+      border-bottom: none;
+  }
+  #content .side_picture img:hover
+  {
+      cursor: pointer;
+      opacity: 0.9;
+  }
+  #pagebottom
+  {
+      position: relative;
+      background-image: url('images/lowerbanner.jpg');
+      background-attachment: scroll;
+      width: 1004px;
+      height: 113px;
+  }
+  #newsletter_icon
+  {
+      width: 50px;
+      height: 50px;
+      float:left;
+      margin-left: 15px;
+      margin-top: 15px;
+  }
+  #newsbox
+  {
+    position: absolute;
+    background-color: gray;
+    border: 1px solid black;
+    width: 385px;
+    height: 75px;
+    font-size: 10px;
+    font-family: "Helvetica";
+    color: white;
+    left: 70px;
+    top: 20px;
+    opacity: 0.9;
+  }
+  #news_form
+  {
+    font-family: "comic sans MS";
+    position: absolute;
+    float: right;
+    top: 35px;
+    left: 70px;
+  }
+  #newsletter_u
+  {
+    font-family: "comic sans MS";
+    position: absolute;
+    top: 57px;
+    left: 70px;
+  }
+  #newshead
+  {
+    position: absolute;
+    left: 147px;
+    top: 8px;
+  }
+  #news_form input.input_text
+  {
+    background-color: gray;
+    font-size: 12px;
+  }
+  #news_form input.submit_button
+  {
+    font-size: 10px;
+    font-family: "Verdana";
+    font-weight: bold;
+    border: 2px outset gray;
+  }
+  #news_form input.submit_button:active
+  {
+    border: 2px inset gray;
+  }
+  #news_form input.submit_button:hover
+  {
+    color: red;
+  }
+  /*]]>*/
+</style>
