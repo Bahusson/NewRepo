@@ -1,7 +1,5 @@
 import sqlite3
 import pandas
-import random
-
 
 def connect(var):
     conn=sqlite3.connect("Lotto.db")
@@ -39,3 +37,5 @@ def searchallbox():
 connect(1)
 connect(2)
 connect(3)
+
+#def calmenu():

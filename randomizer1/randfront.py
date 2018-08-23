@@ -1,13 +1,37 @@
 from tkinter import *
+from tkcalendar import Calendar, DateEntry
+from tkinter import ttk
 import randback
 import random
 
-def randcommand():
-    for item in sorted(random.sample(list(range(1,50)),k=6)) :
-        list2.insert()
+def calselect():
+    top = Toplevel(window)
+    ttk.Label(top, text='Wybierz Datę')
+    cal = DateEntry(top, width=12, background='darkblue',
+                    foreground='white', borderwidth=2, year=2018)
+    cal.pack(padx=10, pady=10)
+
+def roll():
+    randcommand(vi=1)
+
+def randcommand(vi):
+    list2.delete(0,END)
+    if vq == 1 and vi == 1 :
+        list2.insert(END, sorted(random.sample(list(range(1,81)),k=20)))
+    elif vq == 2 and vi == 1 :
+        list2.insert(END, sorted(random.sample(list(range(1,50)),k=6)))
+    elif vq == 3 and vi == 1 :
+        list2.insert(END, sorted(random.sample(list(range(1,43)),k=5)))
+    elif vq == 4 and vi == 1 :
+        lst1 = []
+        lst1.append(sorted(random.sample(list(range(1,36)),k=5)))
+        lst1.append(random.sample(list(range(1,5)),k=1))
+        list2.insert(END, lst1)
+    else:
+        pass
 
 
-#Ta funkcja pozwala zaznaczać elementy z listy1. Trzeba to tak zmodyfikować, żeby zaznaczała całość, bo to jest do checkboxa print report...
+#??Ta funkcja pozwala zaznaczać elementy z listy1. Trzeba to tak zmodyfikować, żeby zaznaczała całość, bo to jest do checkboxa print report...
 def get_selected_row(event):
     try:
         global selected_tuple
@@ -17,20 +41,24 @@ def get_selected_row(event):
     except IndexError:
         pass
 
-#Ta funkcja jest przedłużeniem funkcji powyżej w backendzie. Pewnie też do modyfikacji... :/
+#??Ta funkcja jest przedłużeniem funkcji powyżej w backendzie. Pewnie też do modyfikacji... :/
 def printrep():
     randback.selwindow(selected_tuple[0])
 
 #Muszą być 4 kanały radia i każdy musi logować jeden parametr radiu backendowym.
 #taki chuj, bo nie można w ten sposób użyć "in" a przy przycisku nie można uruchomić komendy z parametrem...
 def radio_chA():
-    randback.radio(1)
+    global vq
+    vq=1
 def radio_chB():
-    randback.radio(2)
+    global vq
+    vq=2
 def radio_chC():
-    randback.radio(3)
+    global vq
+    vq=3
 def radio_chD():
-    randback.radio(4)
+    global vq
+    vq=4
 
 window=Tk()
 
@@ -63,17 +91,11 @@ l13.grid(row=8,column=2)
 l14=Label(window,text="Zagraj w wybraną grę:")
 l14.grid(row=15,column=0)
 
-startdate_text=StringVar()
-e1=Entry(window,textvariable=startdate_text)
-e1.grid(row=2,column=3)
+d1 = ttk.Button(window, text='Wybierz datę', command=calselect)
+d1.grid(row=2,column=3)
 
-enddate_text=StringVar()
-e2=Entry(window,textvariable=enddate_text)
-e2.grid(row=3,column=3)
-
-enddate_text=StringVar()
-e3=Entry(window,textvariable=enddate_text)
-e3.grid(row=6,column=3)
+d2 = ttk.Button(window, text='Wybierz datę', command=calselect)
+d2.grid(row=3,column=3)
 
 list1=Listbox(window, height=6,width=80)
 list1.grid(row=9,column=0,rowspan=6,columnspan=4)
@@ -90,7 +112,7 @@ b1=Button(window,text="Generuj", width=12)
 b1.grid(row=8,column=1)
 b1=Button(window,text="Zapisz", width=12)
 b1.grid(row=8,column=3)
-b1=Button(window,text="Losuj", width=12, command=randcommand)
+b1=Button(window,text="Losuj", width=12, command=roll)
 b1.grid(row=15,column=3)
 b1=Button(window,text="Zamknij", width=12, command=window.destroy)
 b1.grid(row=16,column=3)
