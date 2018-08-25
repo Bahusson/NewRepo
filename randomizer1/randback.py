@@ -16,6 +16,7 @@ def connect(var):
     conn.commit()
     conn.close()
 
+#funkcja szukająca po dacie - ni chuja nie wiem jak to na razie zrobić...
 def searchA(day,month,year):
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
@@ -25,11 +26,16 @@ def searchA(day,month,year):
     return rows
 
 #Funkcja searchall dla checkboxa ściągająca dane z całej bazy danych. Zanim zaczniesz cokolwiek podpinać warto ją zrobić i na niej wszystko testować. Kalendarz zrobisz później...
-def searchallbox():
+def searchallbox(var):
     #miżna wstawić zmienną nazwy bazy danych zamiast pisać to 4 razy...
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
-    cur.execute("SELECT * FROM game ")
+    if var == 1 :
+        cur.execute("SELECT * FROM game1 ")
+    elif var == 2 :
+        cur.execute("SELECT * FROM game2 ")
+    elif var == 3 :
+        cur.execute("SELECT * FROM game3 ")
     rows=cur.fetchall()
     conn.close()
     return rows

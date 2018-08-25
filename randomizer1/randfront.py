@@ -4,12 +4,51 @@ from tkinter import ttk
 import randback
 import random
 
+def sabox():
+    
+
+
+def date1():
+    global dt1
+    dt1=cal.selection_get()
+    print(dt1)
+    list3.delete(0,END)
+    list3.insert(END, dt1)
+    top.destroy()
+
+def date2():
+    global dt2
+    dt2=cal.selection_get()
+    print(dt2)
+    list4.delete(0,END)
+    list4.insert(END, dt2)
+    top.destroy()
+
+def calsel1():
+    global clse
+    clse = 1
+    calselect()
+
+def calsel2():
+    global clse
+    clse = 2
+    calselect()
+
 def calselect():
+    global top
     top = Toplevel(window)
-    ttk.Label(top, text='Wybierz Datę')
-    cal = DateEntry(top, width=12, background='darkblue',
-                    foreground='white', borderwidth=2, year=2018)
+    l1 = ttk.Label(top, text='Wybierz datę')
+    l1.pack(padx=10, pady=10)
+
+    global cal
+    cal = Calendar(top, font="Arial 14", selectmode='day',
+                   cursor="hand1", year=2018, month=2, day=5)
     cal.pack(padx=10, pady=10)
+    if clse == 1:
+        z1 = ttk.Button(top, text='ok', command=date1)
+    elif clse == 2:
+        z1 = ttk.Button(top, text='ok', command=date2)
+    z1.pack(padx=10, pady=10)
 
 def roll():
     randcommand(vi=1)
@@ -30,23 +69,6 @@ def randcommand(vi):
     else:
         pass
 
-
-#??Ta funkcja pozwala zaznaczać elementy z listy1. Trzeba to tak zmodyfikować, żeby zaznaczała całość, bo to jest do checkboxa print report...
-def get_selected_row(event):
-    try:
-        global selected_tuple
-        index=list1.curselection()[0]
-        selected_tuple=list1.get(index)
-        e1.printrep(0,END)
-    except IndexError:
-        pass
-
-#??Ta funkcja jest przedłużeniem funkcji powyżej w backendzie. Pewnie też do modyfikacji... :/
-def printrep():
-    randback.selwindow(selected_tuple[0])
-
-#Muszą być 4 kanały radia i każdy musi logować jeden parametr radiu backendowym.
-#taki chuj, bo nie można w ten sposób użyć "in" a przy przycisku nie można uruchomić komendy z parametrem...
 def radio_chA():
     global vq
     vq=1
@@ -66,12 +88,8 @@ l1=Label(window,text="Wybierz rodzaj gry:")
 l1.grid(row=0,column=2)
 l2=Label(window,text="Zaznacz pomiary:")
 l2.grid(row=2,column=0)
-l3=Label(window,text="Od:")
-l3.grid(row=2,column=2)
 l4=Label(window,text="Całość pomiarów:")
 l4.grid(row=3,column=0)
-l5=Label(window,text="Do:")
-l5.grid(row=3,column=2)
 l6=Label(window,text="Generuj statystyki dla wybranego okresu:")
 l6.grid(row=4,column=0,columnspan=2)
 l7=Label(window,text="Najczęstsza i najrzadsza liczba:")
@@ -91,10 +109,16 @@ l13.grid(row=8,column=2)
 l14=Label(window,text="Zagraj w wybraną grę:")
 l14.grid(row=15,column=0)
 
-d1 = ttk.Button(window, text='Wybierz datę', command=calselect)
+list3=Listbox(window, height=1, width=10)
+list3.grid(row=2,column=2)
+
+list4=Listbox(window, height=1, width=10)
+list4.grid(row=3,column=2)
+
+d1 = ttk.Button(window, text='Wybierz datę', command=calsel1)
 d1.grid(row=2,column=3)
 
-d2 = ttk.Button(window, text='Wybierz datę', command=calselect)
+d2 = ttk.Button(window, text='Wybierz datę', command=calsel2)
 d2.grid(row=3,column=3)
 
 list1=Listbox(window, height=6,width=80)
