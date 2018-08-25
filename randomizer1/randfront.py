@@ -4,9 +4,7 @@ from tkinter import ttk
 import randback
 import random
 
-def sabox():
-    
-
+#def sabox():
 
 def date1():
     global dt1
@@ -129,8 +127,6 @@ sb1=Scrollbar(window)
 sb1.grid(row=9,column=4, rowspan=6)
 list1.configure(yscrollcommand=sb1.set)
 sb1.configure(command=list1.yview)
-
-list1.bind('<<ListBoxSelect>>',get_selected_row)
 
 b1=Button(window,text="Generuj", width=12)
 b1.grid(row=8,column=1)

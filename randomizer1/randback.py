@@ -6,13 +6,17 @@ def connect(var):
     cur=conn.cursor()
     if var == 1 :
         df = pandas.read_csv('http://www.mbnet.com.pl/ml.txt',header =None, sep='[., ]', engine ='python')
-        df.to_sql('game1', conn, if_exists='replace', index=False)
+        df.rename(columns={'2': 'day', '3': 'month', '4' : 'year'}, inplace=True)
+        df1= df.drop(df.columns[0:2],1)
+        df1.to_sql('game1', conn, if_exists='replace', index=False)
     elif var == 2 :
         df = pandas.read_csv('http://www.mbnet.com.pl/dl.txt',header =None, sep='[., ]', engine ='python')
-        df.to_sql('game2', conn, if_exists='replace', index=False)
+        df1= df.drop(df.columns[0:2],1)
+        df1.to_sql('game2', conn, if_exists='replace', index=False)
     elif var == 3 :
         df = pandas.read_csv('http://www.mbnet.com.pl/el.txt',header =None, sep='[., ]', engine ='python')
-        df.to_sql('game3', conn, if_exists='replace', index=False)
+        df1= df.drop(df.columns[0:2],1)
+        df1.to_sql('game3', conn, if_exists='replace', index=False)
     conn.commit()
     conn.close()
 
