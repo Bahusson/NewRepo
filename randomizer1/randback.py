@@ -31,18 +31,37 @@ def searchA(day,month,year):
 
 #Funkcja searchall dla checkboxa ściągająca dane z całej bazy danych. Zanim zaczniesz cokolwiek podpinać warto ją zrobić i na niej wszystko testować. Kalendarz zrobisz później...
 def searchallbox(var):
-    #miżna wstawić zmienną nazwy bazy danych zamiast pisać to 4 razy...
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
     if var == 1 :
-        cur.execute("SELECT * FROM game1 ")
+        cur.execute('SELECT * FROM game1')
     elif var == 2 :
-        cur.execute("SELECT * FROM game2 ")
+        cur.execute('SELECT * FROM game2')
     elif var == 3 :
-        cur.execute("SELECT * FROM game3 ")
+        cur.execute('SELECT * FROM game3')
+    elif var == 4 :
+        pass
     rows=cur.fetchall()
     conn.close()
     return rows
+
+#Ta funkcja jest do obliczeń na samych liczbach, tj. jest niewidoczna dla użytkownika dopóki nie zamówi grafu. NIEPODŁĄCZONA!!!
+def searchvalbox(var):
+    conn=sqlite3.connect("Lotto.db")
+    cur=conn.cursor()
+    if var == 1 :
+        cur.execute('SELECT "5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24" FROM game1')
+    elif var == 2 :
+        cur.execute('SELECT "5","6","7","8","9","10" FROM game2')
+    elif var == 3 :
+        cur.execute('SELECT "5","6","7","8","9" FROM game3')
+    elif var == 4 :
+        pass
+    rows=cur.fetchall()
+    conn.close()
+    return rows
+
+
 
 connect(1)
 connect(2)

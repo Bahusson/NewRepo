@@ -4,7 +4,19 @@ from tkinter import ttk
 import randback
 import random
 
-#def sabox():
+def generate():
+    list1.delete(0,END)
+    if CheckVar1.get() == 1 and RadVar.get() == 1 :
+        for row in randback.searchallbox(1):
+            list1.insert(END, row)
+    elif CheckVar1.get() == 1 and RadVar.get() == 2 :
+        for row in randback.searchallbox(2):
+            list1.insert(END, row)
+    elif CheckVar1.get() == 1 and RadVar.get() == 3 :
+        for row in randback.searchallbox(3):
+            list1.insert(END, row)
+    else:
+        pass
 
 def date1():
     global dt1
@@ -53,13 +65,13 @@ def roll():
 
 def randcommand(vi):
     list2.delete(0,END)
-    if vq == 1 and vi == 1 :
+    if RadVar.get() == 1 and vi == 1 :
         list2.insert(END, sorted(random.sample(list(range(1,81)),k=20)))
-    elif vq == 2 and vi == 1 :
+    elif RadVar.get() == 2 and vi == 1 :
         list2.insert(END, sorted(random.sample(list(range(1,50)),k=6)))
-    elif vq == 3 and vi == 1 :
+    elif RadVar.get() == 3 and vi == 1 :
         list2.insert(END, sorted(random.sample(list(range(1,43)),k=5)))
-    elif vq == 4 and vi == 1 :
+    elif RadVar.get() == 4 and vi == 1 :
         lst1 = []
         lst1.append(sorted(random.sample(list(range(1,36)),k=5)))
         lst1.append(random.sample(list(range(1,5)),k=1))
@@ -67,18 +79,6 @@ def randcommand(vi):
     else:
         pass
 
-def radio_chA():
-    global vq
-    vq=1
-def radio_chB():
-    global vq
-    vq=2
-def radio_chC():
-    global vq
-    vq=3
-def radio_chD():
-    global vq
-    vq=4
 
 window=Tk()
 
@@ -119,16 +119,17 @@ d1.grid(row=2,column=3)
 d2 = ttk.Button(window, text='Wybierz datę', command=calsel2)
 d2.grid(row=3,column=3)
 
-list1=Listbox(window, height=6,width=80)
+list1=Listbox(window, height=8,width=80)
 list1.grid(row=9,column=0,rowspan=6,columnspan=4)
-list2=Listbox(window, height=1,width=60)
+
+list2=Listbox(window, height=1, width=60)
 list2.grid(row=16,column=0,columnspan=3)
 sb1=Scrollbar(window)
-sb1.grid(row=9,column=4, rowspan=6)
+sb1.grid(row=9, column=4, rowspan=6)
 list1.configure(yscrollcommand=sb1.set)
 sb1.configure(command=list1.yview)
 
-b1=Button(window,text="Generuj", width=12)
+b1=Button(window,text="Generuj", width=12, command=generate)
 b1.grid(row=8,column=1)
 b1=Button(window,text="Zapisz", width=12)
 b1.grid(row=8,column=3)
@@ -137,14 +138,14 @@ b1.grid(row=15,column=3)
 b1=Button(window,text="Zamknij", width=12, command=window.destroy)
 b1.grid(row=16,column=3)
 
-var= IntVar()
-r1 = Radiobutton(window, text="MultiMulti", variable=var, value=1, command=radio_chA)
+RadVar= IntVar()
+r1 = Radiobutton(window, text="MultiMulti", variable=RadVar, value=1)
 r1.grid(row=1,column=0)
-r2 = Radiobutton(window, text="Lotto", variable=var, value=2, command=radio_chB)
+r2 = Radiobutton(window, text="Lotto", variable=RadVar, value=2)
 r2.grid(row=1,column=1)
-r3 = Radiobutton(window, text="Mini Lotek", variable=var, value=3, command=radio_chC)
+r3 = Radiobutton(window, text="Mini Lotek", variable=RadVar, value=3)
 r3.grid(row=1,column=2)
-r4 = Radiobutton(window, text="Ekstra Pensja", variable=var, value=4, command=radio_chD)
+r4 = Radiobutton(window, text="Ekstra Pensja", variable=RadVar, value=4)
 r4.grid(row=1,column=3)
 
 CheckVar1 = IntVar()
