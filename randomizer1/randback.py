@@ -20,11 +20,30 @@ def connect(var):
     conn.commit()
     conn.close()
 
-#funkcja szukająca po dacie - ni chuja nie wiem jak to na razie zrobić...
-def searchA(day,month,year):
+#funkcja szukająca po dacie
+def searchA(base,day1,month1,year1,day2,month2,year2):
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
-    cur.execute("SELECT FROM game WHERE day=?, month=?, year=?",(day,month,year))
+    if base == 1:
+        cur.execute('SELECT MIN(rowid) FROM game1 WHERE "2"=? AND "3"=? AND "4"=?',(day2,month2,year2))
+        rowfrom=(cur.fetchone()[0])
+        cur.execute('SELECT MAX(rowid) FROM game1 WHERE "2"=? AND "3"=? AND "4"=?',(day1,month1,year1))
+        rowto=(cur.fetchone()[0])-rowfrom
+        cur.execute('SELECT * FROM game1 LIMIT ? OFFSET ?', (rowto, rowfrom))
+    elif base == 2:
+        cur.execute('SELECT MAX(rowid) FROM game2 WHERE "2"<=? AND "3"=? AND "4"=?',(day2,month2,year2))
+        rowfrom=(cur.fetchone()[0])
+        cur.execute('SELECT MIN(rowid) FROM game2 WHERE "2">=? AND "3"=? AND "4"=?',(day1,month1,year1))
+        rowto=(cur.fetchone()[0])-rowfrom
+        cur.execute('SELECT * FROM game2 LIMIT ? OFFSET ?', (rowto, rowfrom))
+    elif base == 3:
+        cur.execute('SELECT MAX(rowid) FROM game2 WHERE "2"<=? AND "3"=? AND "4"=?',(day2,month2,year2))
+        rowfrom=(cur.fetchone()[0])
+        cur.execute('SELECT MIN(rowid) FROM game2 WHERE "2">=? AND "3"=? AND "4"=?',(day1,month1,year1))
+        rowto=(cur.fetchone()[0])-rowfrom
+        cur.execute('SELECT * FROM game2 LIMIT ? OFFSET ?', (rowto, rowfrom))
+    elif base == 4:
+        pass
     rows=cur.fetchall()
     conn.close()
     return rows

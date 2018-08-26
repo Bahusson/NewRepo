@@ -4,6 +4,7 @@ from tkinter import ttk
 import randback
 import random
 
+#Ostateczna funkcja guzika-generatora feed dla listy1
 def generate():
     list1.delete(0,END)
     if CheckVar1.get() == 1 and RadVar.get() == 1 :
@@ -15,13 +16,21 @@ def generate():
     elif CheckVar1.get() == 1 and RadVar.get() == 3 :
         for row in randback.searchallbox(3):
             list1.insert(END, row)
+    elif CheckVar1.get() == 0 and RadVar.get() == 1 :
+        for row in randback.searchA(1,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
+            list1.insert(END, row)
+    elif CheckVar1.get() == 0 and RadVar.get() == 2 :
+        for row in randback.searchA(2,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
+            list1.insert(END, row)
+    elif CheckVar1.get() == 0 and RadVar.get() == 3 :
+        for row in randback.searchA(3,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
+            list1.insert(END, row)
     else:
         pass
 
 def date1():
     global dt1
     dt1=cal.selection_get()
-    print(dt1)
     list3.delete(0,END)
     list3.insert(END, dt1)
     top.destroy()
@@ -29,7 +38,6 @@ def date1():
 def date2():
     global dt2
     dt2=cal.selection_get()
-    print(dt2)
     list4.delete(0,END)
     list4.insert(END, dt2)
     top.destroy()
@@ -50,6 +58,7 @@ def calselect():
     l1 = ttk.Label(top, text='Wybierz datę')
     l1.pack(padx=10, pady=10)
 
+#Ustaw tak, żeby na kalendarzu zawsze wyskakiwała pierwsza i/lub ostatnia data z bazy danych.
     global cal
     cal = Calendar(top, font="Arial 14", selectmode='day',
                    cursor="hand1", year=2018, month=2, day=5)
