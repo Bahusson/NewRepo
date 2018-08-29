@@ -6,7 +6,6 @@ df1=df.drop(df.columns[0:4],1)
 df2 = df1.apply(pandas.value_counts).fillna(0);
 df2.loc[:,'total'] = df2.sum(axis=1)
 df3=df2
-print(df3.sort_values(['total']))
 nplus = df3.sort_values(['total'], ascending=[False])[:1].index.values;
 nminus = df3.sort_values(['total'], ascending=[False])[-1:].index.values;
 print(nplus)

@@ -29,6 +29,20 @@ def radparam():
     else:
         pass
 
+#podfunkcja do liczenia najmniejszej i największej liczby, oraz kilku największych liczb.
+def gennums():
+    if CheckVar2.get() == 1 and CheckVar3.get() == 1 :
+        for row in randback.enumerators(rad,selnums.get(),1,1):
+            list1.insert(END, row)
+    elif CheckVar2.get() == 1 and CheckVar3.get() == 0 :
+        for row in randback.enumerators(rad,selnums.get(),1,0):
+            list1.insert(END, row)
+    elif CheckVar2.get() == 0 and CheckVar3.get() == 1 :
+        for row in randback.enumerators(rad,selnums.get(),0,1):
+            list1.insert(END, row)
+    else:
+        pass
+
 #podfunkcja generatora dla tworzenia grafu i średnich
 def gendf():
     radparam()
@@ -72,6 +86,7 @@ def generate():
     elif CheckVar6.get() == 0 :
         insdate()
     gendf()
+    gennums()
 
 def date1():
     global dt1
@@ -174,6 +189,10 @@ d1.grid(row=2,column=3)
 
 d2 = ttk.Button(window, text='Wybierz datę', command=calsel2)
 d2.grid(row=3,column=3)
+
+selnums = IntVar()
+e1 = Entry(window, textvariable=selnums, width=8)
+e1.grid(row=6,column=3)
 
 list1=Listbox(window, height=8,width=80)
 list1.grid(row=9,column=0,rowspan=6,columnspan=4)

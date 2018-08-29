@@ -114,12 +114,31 @@ def dfdb(var):
     else:
         pass
 
+def enumerators(base,value,var1,var2):
+    dfdb(base)
+    df1=df.drop(df.columns[0:3],1)
+    df2 = df1.apply(pandas.value_counts).fillna(0);
+    df2.loc[:,'total'] = df2.sum(axis=1)
+    df3=df2
+    nplus = df3.sort_values(['total'], ascending=[False])[:1].index.values;
+    nminus = df3.sort_values(['total'], ascending=[False])[-1:].index.values;
+    nums = df3.sort_values(['total'], ascending=[False])[:int(value)].index.values;
+    if var1 == 1 and var2 == 1 :
+        yield "Max: " + str(nplus) + "  Min: " + str(nminus)
+        yield "Od najczęstszej: " + str(nums)
+    elif var1 == 1 and var2 == 0 :
+        yield "Max: " + str(nplus) + "  Min: " + str(nminus)
+    elif var1 == 0 and var2 == 1 :
+        yield "Od najczęstszej: " + str(nums)
+    else:
+        pass
+
 def makedf(base,var1,var2):
     dfdb(base)
+    global df1
     df1=df.drop(df.columns[0:3],1)
     df4=df1.T
     df5=df4.mean().round(0).value_counts()
-    print(df5)
     zipped = zip(df5.index, df5.values)
     a=list(zipped)
     global source
