@@ -4,22 +4,46 @@ from tkinter import ttk
 import randback
 import random
 
+#Zrób jeszcze tak, żeby po zaznaczeniu kratki "zaznacz całość pomiarów" wyszarzały się entries kalendarza.
+#Zrób kratkę "bez losowań:" która będzie dawać tylko statystyki bez czystych wyników - przydatne przy dużych zbiorach gdy chcesz je obejrzeć w oknie a nie generować raport...
+
+#podfukcja licząca parametr do przekazania poniżej z radia. Nie mam na razie pomysłu jak to zrobić prościej.
+#Może z czasem coś wpadnie jak zwykle...
+def radparam():
+    global rad
+    if str(CheckVar1.get())+str(RadVar.get()) == "11" :
+        rad = 1
+    elif str(CheckVar1.get())+str(RadVar.get()) == "12" :
+        rad = 2
+    elif str(CheckVar1.get())+str(RadVar.get()) == "13" :
+        rad = 3
+    elif str(CheckVar1.get())+str(RadVar.get()) == "01" :
+        randback.searchA(1,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
+        rad = 4
+    elif str(CheckVar1.get())+str(RadVar.get()) == "02" :
+        randback.searchA(2,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
+        rad = 5
+    elif str(CheckVar1.get())+str(RadVar.get()) == "03" :
+        randback.searchA(3,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
+        rad = 6
+    else:
+        pass
+
+#podfunkcja generatora dla tworzenia grafu i średnich
 def gendf():
+    radparam()
     if CheckVar4.get() == 1 and CheckVar5.get() == 1 :
-        for row in randback.makedf(1,1):
+        for row in randback.makedf(rad,1,1):
             list1.insert(END, row)
     elif CheckVar4.get() == 0 and CheckVar5.get() == 1 :
-        randback.makedf(0,1)
+        randback.makedf(rad,0,1)
     elif CheckVar4.get() == 1 and CheckVar5.get() == 0 :
-        for row in randback.makedf(1,0):
+        for row in randback.makedf(rad,1,0):
             list1.insert(END, row)
     else:
         pass
 
-
-#Ostateczna funkcja guzika-generatora feed dla listy1
-def generate():
-    list1.delete(0,END)
+def insdate():
     if CheckVar1.get() == 1 and RadVar.get() == 1 :
         for row in randback.searchallbox(1):
             list1.insert(END, row)
@@ -40,6 +64,13 @@ def generate():
             list1.insert(END, row)
     else:
         pass
+#Ostateczna funkcja guzika-generatora feed dla listy1
+def generate():
+    list1.delete(0,END)
+    if CheckVar6.get() == 1 :
+        pass
+    elif CheckVar6.get() == 0 :
+        insdate()
     gendf()
 
 def date1():
@@ -72,7 +103,9 @@ def calselect():
     l1 = ttk.Label(top, text='Wybierz datę')
     l1.pack(padx=10, pady=10)
 
-#Ustaw tak, żeby na kalendarzu zawsze wyskakiwała pierwsza i/lub ostatnia data z bazy danych.
+#TO-DO: Ustaw tak, żeby na kalendarzu zawsze wyskakiwała pierwsza i/lub ostatnia data z bazy danych.
+#Utwórz globalną zmienną z datą początkową i końcową z zaznaczonego radia i zakoduj to jako default dla dwóch wyskakujących kalendarzy.
+#Następnie pod kalendarzem zrób 3 entry pointy z tym defaultem w którym można by wpisywać datę w odp. formacie, żeby łatwiej się zaznaczało zamiast szukać strzałkami.
     global cal
     cal = Calendar(top, font="Arial 14", selectmode='day',
                    cursor="hand1", year=2018, month=2, day=5)
@@ -83,18 +116,16 @@ def calselect():
         z1 = ttk.Button(top, text='ok', command=date2)
     z1.pack(padx=10, pady=10)
 
-def roll():
-    randcommand(vi=1)
 
-def randcommand(vi):
+def roll():
     list2.delete(0,END)
-    if RadVar.get() == 1 and vi == 1 :
+    if RadVar.get() == 1 :
         list2.insert(END, sorted(random.sample(list(range(1,81)),k=20)))
-    elif RadVar.get() == 2 and vi == 1 :
+    elif RadVar.get() == 2 :
         list2.insert(END, sorted(random.sample(list(range(1,50)),k=6)))
-    elif RadVar.get() == 3 and vi == 1 :
+    elif RadVar.get() == 3 :
         list2.insert(END, sorted(random.sample(list(range(1,43)),k=5)))
-    elif RadVar.get() == 4 and vi == 1 :
+    elif RadVar.get() == 4 :
         lst1 = []
         lst1.append(sorted(random.sample(list(range(1,36)),k=5)))
         lst1.append(random.sample(list(range(1,5)),k=1))
@@ -117,6 +148,8 @@ l7=Label(window,text="Najczęstsza i najrzadsza liczba:")
 l7.grid(row=5,column=0)
 l8=Label(window,text="Najczęściej padające liczby:")
 l8.grid(row=6,column=0)
+l8a=Label(window,text="Bez Losowań:")
+l8a.grid(row=5,column=2)
 l9=Label(window,text="Ilość liczb:")
 l9.grid(row=6,column=2)
 l10=Label(window,text="Średnie wyników losowań:")
@@ -176,6 +209,7 @@ CheckVar2 = IntVar()
 CheckVar3 = IntVar()
 CheckVar4 = IntVar()
 CheckVar5 = IntVar()
+CheckVar6 = IntVar()
 c1 = Checkbutton(window, variable = CheckVar1, onvalue = 1, offvalue = 0)
 c1.grid(row=3,column=1)
 c2 = Checkbutton(window, variable = CheckVar2, onvalue = 1, offvalue = 0)
@@ -186,6 +220,9 @@ c4 = Checkbutton(window, variable = CheckVar4, onvalue = 1, offvalue = 0)
 c4.grid(row=7,column=1)
 c5 = Checkbutton(window, variable = CheckVar5, onvalue = 1, offvalue = 0)
 c5.grid(row=7,column=3)
+c6 = Checkbutton(window, variable = CheckVar6, onvalue = 1, offvalue = 0)
+c6.grid(row=5,column=3)
+
 
 
 window.mainloop()

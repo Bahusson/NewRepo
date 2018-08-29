@@ -22,17 +22,16 @@ def connect(var):
     conn.close()
 
 
-global rowfrom
 #funkcja szukająca po dacie
 def searchA(base,day1,month1,year1,day2,month2,year2):
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
+    global rowfrom
+    global rowto
     if base == 1:
         cur.execute('SELECT MIN(rowid) FROM game1 WHERE "2"=? AND "3"=? AND "4"=?',(day2,month2,year2))
-        global rowfrom
         rowfrom=(cur.fetchone()[0])
         cur.execute('SELECT MAX(rowid) FROM game1 WHERE "2"=? AND "3"=? AND "4"=?',(day1,month1,year1))
-        global rowto
         rowto=(cur.fetchone()[0])-rowfrom
         cur.execute('SELECT * FROM game1 LIMIT ? OFFSET ?', (rowto, rowfrom))
     elif base == 2:
@@ -42,18 +41,18 @@ def searchA(base,day1,month1,year1,day2,month2,year2):
         rowto=(cur.fetchone()[0])-rowfrom
         cur.execute('SELECT * FROM game2 LIMIT ? OFFSET ?', (rowto, rowfrom))
     elif base == 3:
-        cur.execute('SELECT MAX(rowid) FROM game2 WHERE "2"<=? AND "3"=? AND "4"=?',(day2,month2,year2))
+        cur.execute('SELECT MAX(rowid) FROM game3 WHERE "2"<=? AND "3"=? AND "4"=?',(day2,month2,year2))
         rowfrom=(cur.fetchone()[0])
-        cur.execute('SELECT MIN(rowid) FROM game2 WHERE "2">=? AND "3"=? AND "4"=?',(day1,month1,year1))
+        cur.execute('SELECT MIN(rowid) FROM game3 WHERE "2">=? AND "3"=? AND "4"=?',(day1,month1,year1))
         rowto=(cur.fetchone()[0])-rowfrom
-        cur.execute('SELECT * FROM game2 LIMIT ? OFFSET ?', (rowto, rowfrom))
+        cur.execute('SELECT * FROM game3 LIMIT ? OFFSET ?', (rowto, rowfrom))
     elif base == 4:
         pass
     rows=cur.fetchall()
     conn.close()
     return rows
 
-#Funkcja searchall dla checkboxa ściągająca dane z całej bazy danych. Zanim zaczniesz cokolwiek podpinać warto ją zrobić i na niej wszystko testować. Kalendarz zrobisz później...
+#Funkcja searchall dla checkboxa ściągająca dane z całej bazy danych. .
 def searchallbox(var):
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
@@ -63,23 +62,6 @@ def searchallbox(var):
         cur.execute('SELECT * FROM game2')
     elif var == 3 :
         cur.execute('SELECT * FROM game3')
-    elif var == 4 :
-        pass
-    rows=cur.fetchall()
-    conn.close()
-    return rows
-
-#Ta funkcja jest do obliczeń na samych liczbach, tj. jest niewidoczna dla użytkownika dopóki nie zamówi grafu.
-#NIEPODŁĄCZONA!!! (Chyba będzie niepotrzebna, bo będę liczył na rekonwertowanym df...)
-def searchvalbox(var):
-    conn=sqlite3.connect("Lotto.db")
-    cur=conn.cursor()
-    if var == 1 :
-        cur.execute('SELECT "5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24" FROM game1')
-    elif var == 2 :
-        cur.execute('SELECT "5","6","7","8","9","10" FROM game2')
-    elif var == 3 :
-        cur.execute('SELECT "5","6","7","8","9" FROM game3')
     elif var == 4 :
         pass
     rows=cur.fetchall()
@@ -102,14 +84,42 @@ def makegraph():
         show(p)
 
 #To funkcja rekonwertująca bazę danych do df aby można było zrobić graf i inne fajne rzeczy na liczbach...
-#Ciekawe dlaczego jak wywołuje się średnie, to również dwa razy wywala graf. O.o
-def makedf(var1,var2):
-    df = pandas.read_sql_query(
-        sql=('SELECT * FROM game1 LIMIT ? OFFSET ?'),
-        con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+
+def dfdb(var):
+    global df
+    if var == 1 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game1'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, parse_dates=None, chunksize=None)
+    elif var == 2 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game2'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, parse_dates=None, chunksize=None)
+    elif var == 3 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game3'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, parse_dates=None, chunksize=None)
+    elif var == 4 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game1 LIMIT ? OFFSET ?'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+    elif var == 5 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game2 LIMIT ? OFFSET ?'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+    elif var == 6 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game3 LIMIT ? OFFSET ?'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+    else:
+        pass
+
+def makedf(base,var1,var2):
+    dfdb(base)
     df1=df.drop(df.columns[0:3],1)
     df4=df1.T
     df5=df4.mean().round(0).value_counts()
+    print(df5)
     zipped = zip(df5.index, df5.values)
     a=list(zipped)
     global source
@@ -130,10 +140,6 @@ def makedf(var1,var2):
 
 
 
-
-
 connect(1)
 connect(2)
 connect(3)
-
-#def calmenu():
