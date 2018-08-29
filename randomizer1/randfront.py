@@ -3,6 +3,9 @@ from tkcalendar import Calendar, DateEntry
 from tkinter import ttk
 import randback
 import random
+import datetime
+import os
+import glob
 
 #Zrób jeszcze tak, żeby po zaznaczeniu kratki "zaznacz całość pomiarów" wyszarzały się entries kalendarza.
 #Zrób kratkę "bez losowań:" która będzie dawać tylko statystyki bez czystych wyników - przydatne przy dużych zbiorach gdy chcesz je obejrzeć w oknie a nie generować raport...
@@ -148,6 +151,26 @@ def roll():
     else:
         pass
 
+def exporttofile():
+    numvar = 0
+    if not os.path.exists("Raporty"):
+        os.makedirs("Raporty")
+    fdate = datetime.date.today()
+    fdta = str(fdate.day) + str(fdate.month) + str(fdate.year)
+    templist = []
+    for item in glob.glob("Raporty/"+fdta+"?.txt"):
+        templist.append(item)
+    numvar = len(templist)
+    fname = fdta + str(numvar) + ".txt"
+    file = open("Raporty/"+fname, "w")
+    filelist = list1.get(0, END)
+    filelist2 = []
+    for lines in filelist:
+        filelist2.append(str(lines))
+    for line in filelist2:
+        file.write(line + "\n")
+    file.close()
+    list1.delete(0,END)
 
 window=Tk()
 
@@ -206,7 +229,7 @@ sb1.configure(command=list1.yview)
 
 b1=Button(window,text="Generuj", width=12, command=generate)
 b1.grid(row=8,column=1)
-b1=Button(window,text="Zapisz", width=12)
+b1=Button(window,text="Zapisz", width=12, command=exporttofile)
 b1.grid(row=8,column=3)
 b1=Button(window,text="Losuj", width=12, command=roll)
 b1.grid(row=15,column=3)
