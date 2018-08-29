@@ -171,6 +171,8 @@ def exporttofile():
         file.write(line + "\n")
     file.close()
     list1.delete(0,END)
+    variable = "Zapisano raport jako: " + fname
+    list1.insert(END, variable)
 
 window=Tk()
 
