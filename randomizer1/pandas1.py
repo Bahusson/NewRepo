@@ -8,6 +8,7 @@ df1=df.drop(df.columns[0:2],1)
 df4=df1.T
 df5=df4.mean().round(0).value_counts()
 
+
 source = ColumnDataSource(
     data=dict(
         Means=df5.index,

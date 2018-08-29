@@ -4,6 +4,19 @@ from tkinter import ttk
 import randback
 import random
 
+def gendf():
+    if CheckVar4.get() == 1 and CheckVar5.get() == 1 :
+        for row in randback.makedf(1,1):
+            list1.insert(END, row)
+    elif CheckVar4.get() == 0 and CheckVar5.get() == 1 :
+        randback.makedf(0,1)
+    elif CheckVar4.get() == 1 and CheckVar5.get() == 0 :
+        for row in randback.makedf(1,0):
+            list1.insert(END, row)
+    else:
+        pass
+
+
 #Ostateczna funkcja guzika-generatora feed dla listy1
 def generate():
     list1.delete(0,END)
@@ -27,6 +40,7 @@ def generate():
             list1.insert(END, row)
     else:
         pass
+    gendf()
 
 def date1():
     global dt1
