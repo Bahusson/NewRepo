@@ -203,7 +203,30 @@ def makedf(base,var1,var2):
     else:
             pass
 
-
+#Ta funkcja wyciąga z bazy danych pierwszą/ostatnią datę.
+def getcaldate(base, date):
+    conn=sqlite3.connect("Lotto.db")
+    cur=conn.cursor()
+    if base == 1 and date == 1 :
+        cur.execute('SELECT "2","3","4" FROM game1 ORDER BY rowid ASC LIMIT 1')
+    elif base == 2 and date == 1 :
+        cur.execute('SELECT "2","3","4" FROM game2 ORDER BY rowid ASC LIMIT 1')
+    elif base == 3 and date == 1 :
+        cur.execute('SELECT "2","3","4" FROM game3 ORDER BY rowid ASC LIMIT 1')
+    elif base == 4 and date == 1 :
+        cur.execute('SELECT "2","3","4" FROM game4 ORDER BY rowid ASC LIMIT 1')
+    elif base == 1 and date == 2 :
+        cur.execute('SELECT "2","3","4" FROM game1 ORDER BY rowid DESC LIMIT 1')
+    elif base == 2 and date == 2 :
+        cur.execute('SELECT "2","3","4" FROM game2 ORDER BY rowid DESC LIMIT 1')
+    elif base == 3 and date == 2 :
+        cur.execute('SELECT "2","3","4" FROM game3 ORDER BY rowid DESC LIMIT 1')
+    elif base == 4 and date == 2 :
+        cur.execute('SELECT "2","3","4" FROM game4 ORDER BY rowid DESC LIMIT 1')
+    rows=cur.fetchall()
+    conn.close()
+    return rows
+    
 connect(1)
 connect(2)
 connect(3)

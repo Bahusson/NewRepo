@@ -122,18 +122,58 @@ def calsel2():
     clse = 2
     calselect()
 
+#Ta funkcja sprawia, że przy wyborze daty automatycznie ustawia się pierwsza/ostatnia z bazy danych.
+def fromraddate():
+    global dty
+    global dtm
+    global dtd
+    lst1 = []
+
+    if clse == 1 and RadVar.get() == 1 :
+        for item in randback.getcaldate(1,1):
+            lst1.append(item)
+    elif clse == 1 and RadVar.get() == 2 :
+        for item in randback.getcaldate(2,1):
+            lst1.append(item)
+    elif clse == 1 and RadVar.get() == 3 :
+        for item in randback.getcaldate(3,1):
+            lst1.append(item)
+    elif clse == 1 and RadVar.get() == 4 :
+        for item in randback.getcaldate(4,1):
+            lst1.append(item)
+    elif clse == 2 and RadVar.get() == 1 :
+        for item in randback.getcaldate(1,2):
+            lst1.append(item)
+    elif clse == 2 and RadVar.get() == 2 :
+        for item in randback.getcaldate(2,2):
+            lst1.append(item)
+    elif clse == 2 and RadVar.get() == 3 :
+        for item in randback.getcaldate(3,2):
+            lst1.append(item)
+    elif clse == 2 and RadVar.get() == 4 :
+        for item in randback.getcaldate(4,2):
+            lst1.append(item)
+
+    print(lst1)
+    dtd = lst1[0][0]
+    dtm = lst1[0][1]
+    dty = lst1[0][2]
+
+
 def calselect():
     global top
+    fromraddate()
     top = Toplevel(window)
     l1 = ttk.Label(top, text='Wybierz datę')
     l1.pack(padx=10, pady=10)
 
-#TO-DO: Ustaw tak, żeby na kalendarzu zawsze wyskakiwała pierwsza i/lub ostatnia data z bazy danych.
-#Utwórz globalną zmienną z datą początkową i końcową z zaznaczonego radia i zakoduj to jako default dla dwóch wyskakujących kalendarzy.
 #Następnie pod kalendarzem zrób 3 entry pointy z tym defaultem w którym można by wpisywać datę w odp. formacie, żeby łatwiej się zaznaczało zamiast szukać strzałkami.
     global cal
+    #Popracuj nad tym, żeby zamiast tego co jest było to dateentry
+    #cal = DateEntry(top, width=12, background='darkblue',
+    #                    foreground='white', borderwidth=2, year=dty, month=dtm, day=dtd)
     cal = Calendar(top, font="Arial 14", selectmode='day',
-                   cursor="hand1", year=2018, month=2, day=5)
+                   cursor="hand1", year=dty, month=dtm, day=dtd)
     cal.pack(padx=10, pady=10)
     if clse == 1:
         z1 = ttk.Button(top, text='ok', command=date1)
