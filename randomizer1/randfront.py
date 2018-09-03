@@ -8,7 +8,6 @@ import os
 import glob
 
 #Zrób jeszcze tak, żeby po zaznaczeniu kratki "zaznacz całość pomiarów" wyszarzały się entries kalendarza.
-#Zrób kratkę "bez losowań:" która będzie dawać tylko statystyki bez czystych wyników - przydatne przy dużych zbiorach gdy chcesz je obejrzeć w oknie a nie generować raport...
 
 #podfukcja licząca parametr do przekazania poniżej z radia. Nie mam na razie pomysłu jak to zrobić prościej.
 #Może z czasem coś wpadnie jak zwykle...
@@ -20,17 +19,20 @@ def radparam():
         rad = 2
     elif str(CheckVar1.get())+str(RadVar.get()) == "13" :
         rad = 3
+    elif str(CheckVar1.get())+str(RadVar.get()) == "14" :
+        rad = 4
     elif str(CheckVar1.get())+str(RadVar.get()) == "01" :
         randback.searchA(1,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
-        rad = 4
+        rad = 5
     elif str(CheckVar1.get())+str(RadVar.get()) == "02" :
         randback.searchA(2,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
-        rad = 5
+        rad = 6
     elif str(CheckVar1.get())+str(RadVar.get()) == "03" :
         randback.searchA(3,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
-        rad = 6
-    else:
-        pass
+        rad = 7
+    elif str(CheckVar1.get())+str(RadVar.get()) == "04" :
+        randback.searchA(4,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
+        rad = 8
 
 #podfunkcja do liczenia najmniejszej i największej liczby, oraz kilku największych liczb.
 def gennums():
@@ -70,6 +72,9 @@ def insdate():
     elif CheckVar1.get() == 1 and RadVar.get() == 3 :
         for row in randback.searchallbox(3):
             list1.insert(END, row)
+    elif CheckVar1.get() == 1 and RadVar.get() == 4 :
+        for row in randback.searchallbox(4):
+            list1.insert(END, row)
     elif CheckVar1.get() == 0 and RadVar.get() == 1 :
         for row in randback.searchA(1,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
             list1.insert(END, row)
@@ -79,8 +84,10 @@ def insdate():
     elif CheckVar1.get() == 0 and RadVar.get() == 3 :
         for row in randback.searchA(3,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
             list1.insert(END, row)
-    else:
-        pass
+    elif CheckVar1.get() == 0 and RadVar.get() == 4 :
+        for row in randback.searchA(4,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
+            list1.insert(END, row)
+
 #Ostateczna funkcja guzika-generatora feed dla listy1
 def generate():
     list1.delete(0,END)

@@ -2,7 +2,31 @@ import sqlite3
 import pandas
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, ColumnDataSource
+import urllib.request, urllib.parse, urllib.error
+from bs4 import BeautifulSoup
+import re
+import ssl
 
+#Ten kawałek to parser beautifulsoup i regular expressions dla ekstra pensji, bo na mbtnet nie ma bazy w CSV.
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+def gotolast():
+    url = 'https://www.wynikilotto.net.pl/ekstra-pensja/wyniki/'
+    html = urllib.request.urlopen(url, context=ctx).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    a = str(soup.find_all('td'))
+    p = re.findall(">(\d\d\d\d)<", a)
+    return(p[-1])
+
+url = 'https://www.wynikilotto.net.pl/ekstra-pensja/wyniki/'+str(gotolast())
+html = urllib.request.urlopen(url, context=ctx).read()
+soup = BeautifulSoup(html, 'html.parser')
+lsource = str(soup.find_all('td'))
+g1 = re.findall(">(\d\d\d\d)</td>, <td>(\d\d)[.](\d\d)[.](\d\d\d\d)</td>, <td>(\d\d) (\d\d) (\d\d) (\d\d) (\d\d) [+] <b>(\d\d)<", lsource)
+
+#Na starcie łączy się z siecią i aktualizuje bazy danych dla wszystkich 4 gier losowych.
 def connect(var):
     conn=sqlite3.connect("Lotto.db")
     cur=conn.cursor()
@@ -18,6 +42,10 @@ def connect(var):
         df = pandas.read_csv('http://www.mbnet.com.pl/el.txt',header =None, sep='[., ]', engine ='python')
         df1= df.drop(df.columns[0:2],1)
         df1.to_sql('game3', conn, if_exists='replace', index=False)
+    elif var == 4 :
+        cur.execute('CREATE TABLE IF NOT EXISTS game4 ("1" INTEGER, "2" INTEGER, "3" INTEGER, "4" INTEGER, "5" INTEGER, "6" INTEGER, "7" INTEGER, "8" INTEGER, "9" INTEGER, "10" INTEGER)')
+        cur.executemany('INSERT OR REPLACE INTO game4 ("1","2","3","4","5","6","7","8","9","10") VALUES (?,?,?,?,?,?,?,?,?,?)', g1)
+        cur.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_casenum ON game4 ("1")')
     conn.commit()
     conn.close()
 
@@ -47,7 +75,11 @@ def searchA(base,day1,month1,year1,day2,month2,year2):
         rowto=(cur.fetchone()[0])-rowfrom
         cur.execute('SELECT * FROM game3 LIMIT ? OFFSET ?', (rowto, rowfrom))
     elif base == 4:
-        pass
+        cur.execute('SELECT MIN("1") FROM game4 WHERE "2"=? AND "3"=? AND "4"=?',(day2,month2,year2))
+        rowfrom=(cur.fetchone()[0])
+        cur.execute('SELECT MAX("1") FROM game4 WHERE "2"=? AND "3"=? AND "4"=?',(day1,month1,year1))
+        rowto=(cur.fetchone()[0])-rowfrom
+        cur.execute('SELECT "2", "3", "4", "5", "6", "7", "8", "9", "10" FROM game4 LIMIT ? OFFSET ?', (rowto, rowfrom))
     rows=cur.fetchall()
     conn.close()
     return rows
@@ -63,7 +95,7 @@ def searchallbox(var):
     elif var == 3 :
         cur.execute('SELECT * FROM game3')
     elif var == 4 :
-        pass
+        cur.execute('SELECT "2", "3", "4", "5", "6", "7", "8", "9", "10" FROM game4')
     rows=cur.fetchall()
     conn.close()
     return rows
@@ -101,22 +133,32 @@ def dfdb(var):
             con=sqlite3.connect("Lotto.db"), coerce_float=False, parse_dates=None, chunksize=None)
     elif var == 4 :
         df = pandas.read_sql_query(
-            sql=('SELECT * FROM game1 LIMIT ? OFFSET ?'),
-            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+            sql=('SELECT * FROM game4'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, parse_dates=None, chunksize=None)
     elif var == 5 :
         df = pandas.read_sql_query(
-            sql=('SELECT * FROM game2 LIMIT ? OFFSET ?'),
+            sql=('SELECT * FROM game1 LIMIT ? OFFSET ?'),
             con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
     elif var == 6 :
         df = pandas.read_sql_query(
+            sql=('SELECT * FROM game2 LIMIT ? OFFSET ?'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
+    elif var == 7 :
+        df = pandas.read_sql_query(
             sql=('SELECT * FROM game3 LIMIT ? OFFSET ?'),
             con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
-    else:
-        pass
+    elif var == 8 :
+        df = pandas.read_sql_query(
+            sql=('SELECT * FROM game4 LIMIT ? OFFSET ?'),
+            con=sqlite3.connect("Lotto.db"), coerce_float=False, params=[rowto, rowfrom], parse_dates=None, chunksize=None)
 
 def enumerators(base,value,var1,var2):
     dfdb(base)
-    df1=df.drop(df.columns[0:3],1)
+    if base == 4 or base == 8 :
+        df1=df.drop(df.columns[0:4],1)
+        df1=df1.drop(df.columns[-1],1)
+    else:
+        df1=df.drop(df.columns[0:3],1)
     df2 = df1.apply(pandas.value_counts).fillna(0);
     df2.loc[:,'total'] = df2.sum(axis=1)
     df3=df2
@@ -136,7 +178,11 @@ def enumerators(base,value,var1,var2):
 def makedf(base,var1,var2):
     dfdb(base)
     global df1
-    df1=df.drop(df.columns[0:3],1)
+    if base == 4 or base == 8 :
+        df1=df.drop(df.columns[0:4],1)
+        df1=df1.drop(df.columns[-1],1)
+    else:
+        df1=df.drop(df.columns[0:3],1)
     df4=df1.T
     df5=df4.mean().round(0).value_counts()
     zipped = zip(df5.index, df5.values)
@@ -161,3 +207,4 @@ def makedf(base,var1,var2):
 connect(1)
 connect(2)
 connect(3)
+connect(4)
