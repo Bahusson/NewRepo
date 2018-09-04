@@ -172,8 +172,6 @@ def enumerators(base,value,var1,var2):
         yield "Max: " + str(nplus) + "  Min: " + str(nminus)
     elif var1 == 0 and var2 == 1 :
         yield "Od najczęstszej: " + str(nums)
-    else:
-        pass
 
 def makedf(base,var1,var2):
     dfdb(base)
@@ -185,7 +183,10 @@ def makedf(base,var1,var2):
         df1=df.drop(df.columns[0:3],1)
     df4=df1.T
     df5=df4.mean().round(0).value_counts()
-    zipped = zip(df5.index, df5.values)
+    slist = list()
+    while len(slist)<len(df5.index):
+        slist.append(" / ")
+    zipped = zip(df5.index, slist, df5.values)
     a=list(zipped)
     global source
     source = ColumnDataSource(
@@ -200,8 +201,6 @@ def makedf(base,var1,var2):
             makegraph()
     elif var1 == 1 and var2 == 0:
             return a
-    else:
-            pass
 
 #Ta funkcja wyciąga z bazy danych pierwszą/ostatnią datę.
 def getcaldate(base, date):
@@ -226,7 +225,7 @@ def getcaldate(base, date):
     rows=cur.fetchall()
     conn.close()
     return rows
-    
+
 connect(1)
 connect(2)
 connect(3)

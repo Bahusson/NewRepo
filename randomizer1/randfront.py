@@ -33,6 +33,8 @@ def radparam():
     elif str(CheckVar1.get())+str(RadVar.get()) == "04" :
         randback.searchA(4,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year)
         rad = 8
+    else:
+        pass
 
 #podfunkcja do liczenia najmniejszej i największej liczby, oraz kilku największych liczb.
 def gennums():
@@ -52,11 +54,13 @@ def gennums():
 def gendf():
     radparam()
     if CheckVar4.get() == 1 and CheckVar5.get() == 1 :
+        list1.insert(END, "Średnia / Częstotliwość")
         for row in randback.makedf(rad,1,1):
             list1.insert(END, row)
     elif CheckVar4.get() == 0 and CheckVar5.get() == 1 :
         randback.makedf(rad,0,1)
     elif CheckVar4.get() == 1 and CheckVar5.get() == 0 :
+        list1.insert(END, "Średnia / Częstotliwość")
         for row in randback.makedf(rad,1,0):
             list1.insert(END, row)
     else:
@@ -87,6 +91,8 @@ def insdate():
     elif CheckVar1.get() == 0 and RadVar.get() == 4 :
         for row in randback.searchA(4,dt2.day,dt2.month,dt2.year,dt1.day,dt1.month,dt1.year):
             list1.insert(END, row)
+    else:
+        pass
 
 #Ostateczna funkcja guzika-generatora feed dla listy1
 def generate():
@@ -100,14 +106,14 @@ def generate():
 
 def date1():
     global dt1
-    dt1=cal.selection_get()
+    dt1=cal.get_date()
     list3.delete(0,END)
     list3.insert(END, dt1)
     top.destroy()
 
 def date2():
     global dt2
-    dt2=cal.selection_get()
+    dt2=cal.get_date()
     list4.delete(0,END)
     list4.insert(END, dt2)
     top.destroy()
@@ -153,8 +159,9 @@ def fromraddate():
     elif clse == 2 and RadVar.get() == 4 :
         for item in randback.getcaldate(4,2):
             lst1.append(item)
+    else:
+        pass
 
-    print(lst1)
     dtd = lst1[0][0]
     dtm = lst1[0][1]
     dty = lst1[0][2]
@@ -167,13 +174,9 @@ def calselect():
     l1 = ttk.Label(top, text='Wybierz datę')
     l1.pack(padx=10, pady=10)
 
-#Następnie pod kalendarzem zrób 3 entry pointy z tym defaultem w którym można by wpisywać datę w odp. formacie, żeby łatwiej się zaznaczało zamiast szukać strzałkami.
     global cal
-    #Popracuj nad tym, żeby zamiast tego co jest było to dateentry
-    #cal = DateEntry(top, width=12, background='darkblue',
-    #                    foreground='white', borderwidth=2, year=dty, month=dtm, day=dtd)
-    cal = Calendar(top, font="Arial 14", selectmode='day',
-                   cursor="hand1", year=dty, month=dtm, day=dtd)
+    cal = DateEntry(top, width=12, background='darkblue',
+                        foreground='white', borderwidth=2, year=dty, month=dtm, day=dtd)
     cal.pack(padx=10, pady=10)
     if clse == 1:
         z1 = ttk.Button(top, text='ok', command=date1)
@@ -224,7 +227,7 @@ def exporttofile():
 window=Tk()
 
 l1=Label(window,text="Wybierz rodzaj gry:")
-l1.grid(row=0,column=2)
+l1.grid(row=0,column=1,columnspan =2)
 l2=Label(window,text="Zaznacz pomiary:")
 l2.grid(row=2,column=0)
 l4=Label(window,text="Całość pomiarów:")
@@ -256,10 +259,10 @@ list3.grid(row=2,column=2)
 list4=Listbox(window, height=1, width=10)
 list4.grid(row=3,column=2)
 
-d1 = ttk.Button(window, text='Wybierz datę', command=calsel1)
+d1 = ttk.Button(window, text='Data początkowa', command=calsel1, width=20)
 d1.grid(row=2,column=3)
 
-d2 = ttk.Button(window, text='Wybierz datę', command=calsel2)
+d2 = ttk.Button(window, text='Data końcowa', command=calsel2, width=20)
 d2.grid(row=3,column=3)
 
 selnums = IntVar()
